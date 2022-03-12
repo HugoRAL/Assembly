@@ -1,0 +1,74 @@
+#make_COM#
+ ORG 100H
+.Data
+info1 db 'Digite caracteres ate enter', 13, 10, '$'
+info2 db 'Eis a string criada:$'
+info3 db 'Eis string copiada: $'
+str db 80 dup(?)
+
+aux db 80 dup(?)
+linha db 13,10,'$'
+.Code
+lea dx, info1
+mov ah, 9
+int 21h
+lea si, str
+mov ah,1
+l1: int 21h
+cmp al, 13
+jz l2
+
+mov [si],al
+inc si
+jmp l1
+l2: mov al,'$'
+mov [si],al
+lea dx, linha
+mov ah,9
+int 21h
+lea dx, info2
+mov ah, 9
+int 21h
+lea dx, linha
+int 21h
+lea dx, str
+mov ah, 9
+int 21h
+lea dx, linha
+int 21h
+lea si,str
+lea di,aux
+l3: mov al,[si]
+cmp al,'$'
+jz fim
+
+cmp al, ' '
+jz l4
+mov [di],al
+inc si
+inc di
+jmp l3
+
+l4:mov [di],'#'
+ inc di
+ mov [di],'#'
+ inc di
+ inc si
+ jmp l3
+fim:
+ mov al,'$'
+mov [di],al
+lea dx, linha
+mov ah,9
+int 21h
+lea dx, info3
+mov ah, 9
+int 21h
+lea dx, linha
+mov ah,9
+int 21h
+lea dx, aux
+mov ah, 9
+int 21h
+MOV AH, 4Ch
+ INT 21h
